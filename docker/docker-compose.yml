@@ -1,0 +1,89 @@
+version: '3.8'
+
+# ============================================================
+#  Docker Compose — Système de Gestion de Maintenance
+#  Services : mysql | backend | frontend
+# ============================================================
+
+services:
+
+  # ─────────────────────────────────────────
+  # SERVICE 1 : Base de données MySQL
+  # ─────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: maintenance_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: maintenance_db
+      MYSQL_USER: maintenance_user
+      MYSQL_PASSWORD: maintenance_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      # Persistance des données MySQL sur le disque
+      - mysql_data:/var/lib/mysql
+      # Script SQL optionnel exécuté à la création
+      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - maintenance_network
+
+  # ─────────────────────────────────────────
+  # SERVICE 2 : Backend Spring Boot
+  # ─────────────────────────────────────────
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend
+    container_name: maintenance_backend
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      # Configuration de la base de données (remplace application.properties)
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/maintenance_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8081
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - maintenance_network
+
+  # ─────────────────────────────────────────
+  # SERVICE 3 : Frontend Angular (via Nginx)
+  # ─────────────────────────────────────────
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    container_name: maintenance_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - maintenance_network
+
+# ─────────────────────────────────────────
+# VOLUMES : Persistance des données
+# ─────────────────────────────────────────
+volumes:
+  mysql_data:
+    driver: local
+
+# ─────────────────────────────────────────
+# RÉSEAU : Communication entre services
+# ─────────────────────────────────────────
+networks:
+  maintenance_network:
+    driver: bridge

@@ -33,6 +33,15 @@ public class SecurityConfig {
                 .requestMatchers("/api/**").permitAll()
                 // Console H2 pour le développement
                 .requestMatchers("/h2-console/**").permitAll()
+                // Swagger UI & OpenAPI spec
+                .requestMatchers(
+                    "/swagger-ui.html",
+                    "/swagger-ui/**",
+                    "/v3/api-docs",
+                    "/v3/api-docs/**",
+                    "/swagger-resources/**",
+                    "/webjars/**"
+                ).permitAll()
                 // Toute autre requête nécessite une auth (aucune page statique ne doit exister)
                 .anyRequest().permitAll()
             )

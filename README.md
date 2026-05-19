@@ -34,12 +34,15 @@ Le projet est divisé en deux parties principales :
 ## 🚀 Démarrage Rapide (Développement Local)
 
 ### Prérequis
+
 - **Node.js** et **npm** (pour le frontend)
 - **Java 17** (pour le backend)
 - **Maven** (inclus via le wrapper `mvnw` dans le dossier backend)
 
 ### 1. Lancer le Backend
+
 Ouvrez un terminal et placez-vous dans le dossier `backend` :
+
 ```bash
 cd backend
 # Sur Windows (si Java 17 n'est pas votre version par défaut, configurez d'abord JAVA_HOME)
@@ -48,15 +51,19 @@ cd backend
 # Sur Linux / macOS
 ./mvnw spring-boot:run
 ```
+
 Le backend démarrera sur `http://localhost:8081` (ou le port défini dans `application.properties`) et insérera des données de test automatiquement.
 
 ### 2. Lancer le Frontend
+
 Ouvrez un nouveau terminal et placez-vous dans le dossier `frontend` :
+
 ```bash
 cd frontend
 npm install
 npm start
 ```
+
 Le frontend sera accessible à l'adresse **http://localhost:4200/**.
 
 ---
@@ -65,9 +72,9 @@ Le frontend sera accessible à l'adresse **http://localhost:4200/**.
 
 Le projet inclut une configuration Docker complète pour un déploiement facile, incluant une base de données MySQL.
 
-1. Placez-vous dans le dossier `docker` :
+1. Placez-vous à la racine du projet :
    ```bash
-   cd docker
+   cd maintenance-system-
    ```
 2. Lancez les conteneurs :
    ```bash
@@ -81,6 +88,7 @@ Pour plus de détails sur la configuration Docker, consultez le fichier `docker/
 ## 📚 Documentation Complète
 
 Une documentation approfondie est disponible dans le dossier `documentation/` :
+
 - **[DOCUMENTATION.md](documentation/DOCUMENTATION.md)** : Architecture, structure, API REST.
 - **[BASE_DE_DONNEES.md](documentation/BASE_DE_DONNEES.md)** : Modèle relationnel et schéma.
 - **[GUIDE_EXECUTION.md](documentation/GUIDE_EXECUTION.md)** : Guide détaillé pas à pas.

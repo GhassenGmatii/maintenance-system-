@@ -26,7 +26,7 @@ Le projet est divisé en deux parties principales :
 2. **Backend (Spring Boot)**
    - API RESTful robuste.
    - Construit avec Spring Boot 3.3.5, Java 17, et Hibernate.
-   - Base de données : H2 en mémoire (par défaut), facilement configurable pour MySQL/PostgreSQL.
+   - Base de données : **MySQL** (migrée pour la persistance des données).
    - Situé dans le dossier `backend/`.
 
 ---
@@ -37,22 +37,30 @@ Le projet est divisé en deux parties principales :
 
 - **Node.js** et **npm** (pour le frontend)
 - **Java 17** (pour le backend)
+- **Serveur MySQL** (doit être installé et en cours d'exécution localement)
 - **Maven** (inclus via le wrapper `mvnw` dans le dossier backend)
 
 ### 1. Lancer le Backend
 
+**Option A : Via le Terminal**
 Ouvrez un terminal et placez-vous dans le dossier `backend` :
 
 ```bash
 cd backend
-# Sur Windows (si Java 17 n'est pas votre version par défaut, configurez d'abord JAVA_HOME)
+# Sur Windows
 .\mvnw.cmd spring-boot:run
 
 # Sur Linux / macOS
 ./mvnw spring-boot:run
 ```
 
-Le backend démarrera sur `http://localhost:8081` (ou le port défini dans `application.properties`) et insérera des données de test automatiquement.
+**Option B : Via Eclipse**
+1. Ouvrez Eclipse et faites **File > Import > Maven > Existing Maven Projects**.
+2. Sélectionnez le dossier `backend`.
+3. Patientez pendant l'importation.
+4. Lancez `MaintenanceApplication.java` (dans `src/main/java`) via **Run As > Java Application**.
+
+Le backend démarrera sur `http://localhost:8081` et se connectera à votre base de données MySQL locale.
 
 ### 2. Lancer le Frontend
 
@@ -81,26 +89,19 @@ Le projet inclut une configuration Docker complète pour un déploiement facile,
    docker-compose up --build -d
    ```
 
-Pour plus de détails sur la configuration Docker, consultez le fichier `docker/DOCKER.md`.
+Le fichier `docker-compose.yml` se trouve à la racine du projet.
 
 ---
 
-## 📚 Documentation Complète
-
-Une documentation approfondie est disponible dans le dossier `documentation/` :
-
-- **[DOCUMENTATION.md](documentation/DOCUMENTATION.md)** : Architecture, structure, API REST.
-- **[BASE_DE_DONNEES.md](documentation/BASE_DE_DONNEES.md)** : Modèle relationnel et schéma.
-- **[GUIDE_EXECUTION.md](documentation/GUIDE_EXECUTION.md)** : Guide détaillé pas à pas.
 
 ---
 
 ## 🛠 Structure du Dépôt
 
-```
-maintenance_management_system/
-├── backend/            # Code source du backend Spring Boot
-├── frontend/           # Code source du frontend Angular
-├── docker/             # Fichiers Dockerfile et docker-compose.yml
-└── documentation/      # Fichiers de documentation détaillée
+```text
+maintenance-system-/
+├── backend/                # Code source du backend Spring Boot
+├── frontend/               # Code source du frontend Angular
+├── docker-compose.yml      # Configuration pour le déploiement conteneurisé
+
 ```
